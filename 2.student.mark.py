@@ -1,3 +1,13 @@
+def input_positive_number(prompt):
+    while True:
+        try:
+            number = int(input(prompt))
+            if number > 0:
+                return number
+            print("Number must be greater than 0.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
 class Person:
     def __init__(self, name, id, dob):
         self.name = name
@@ -56,6 +66,7 @@ class School:
                 print(f"{student}: {mark}")
         else:
             print("No marks recorded for this course.")
+    
 
 if __name__ == "__main__":
     school = School()
