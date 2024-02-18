@@ -1,10 +1,6 @@
-
-
 import math
 import numpy as np
 import curses
-
-
 
 def input_positive_number(prompt):
     while True:
@@ -42,10 +38,9 @@ class Course:
         self.credit = credit
         self.marks = {}
 
-def add_mark(self, student, mark):
-    self.marks[student.name] = mark
-    student.add_mark(self, mark, self.credit)
-
+    def add_mark(self, student, mark):
+        self.marks[student.name] = mark
+        student.add_mark(self, mark, self.credit)
 
     def __str__(self):
         return f"{self.name}, ID: {self.id}"
@@ -87,18 +82,28 @@ class School:
     def sort_students_by_gpa(self):
         self.students.sort(key=lambda student: student.calculate_gpa(), reverse=True)
 
-    
 
-if __name__ == "__main__":
+def main(stdscr):
     school = School()
 
-    for _ in range(input_positive_number("Enter the number of students: ")):
+    stdscr.addstr("Welcome to Student Mark Management System!\n")
+    stdscr.refresh()
+
+    num_students = input_positive_number("Enter the number of students: ")
+    stdscr.addstr(f"\nNumber of students: {num_students}\n")
+    stdscr.refresh()
+
+    for _ in range(num_students):
         name = input("Enter student name: ")
         id = input("Enter student ID: ")
         dob = input("Enter student DoB: ")
         school.add_student(Student(name, id, dob))
 
-    for _ in range(input_positive_number("Enter the number of courses: ")):
+    num_courses = input_positive_number("Enter the number of courses: ")
+    stdscr.addstr(f"\nNumber of courses: {num_courses}\n")
+    stdscr.refresh()
+
+    for _ in range(num_courses):
         name = input("Enter course name: ")
         id = input("Enter course ID: ")
         credit = input_positive_number("Enter course credit: ")
@@ -112,11 +117,20 @@ if __name__ == "__main__":
             mark = math.floor(mark * 10) / 10  # round down to 1 decimal place
             course.add_mark(student, mark)
 
+    stdscr.addstr("\nCourses:\n")
     school.show_courses()
+    stdscr.addstr("\nStudents:\n")
     school.show_students()
+
     course_to_show = input("\nEnter the course to show marks: ")
+    stdscr.addstr(f"\nMarks for {course_to_show}:\n")
     school.show_marks(course_to_show)
 
     school.sort_students_by_gpa()
-    print("\nStudents sorted by GPA:")
+    stdscr.addstr("\nStudents sorted by GPA:\n")
     school.show_students()
+
+    stdscr.getch()
+
+if __name__ == "__main__":
+    curses.wrapper(main)
